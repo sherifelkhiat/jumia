@@ -14,4 +14,6 @@ interface CustomerServiceContract
     public function addStateToCustomerList(String $phone);
 
     public function paginate($items, $perPage = 15, $page = null);
+
+    public function filterCollection(Collection $customers, int $state);
 }

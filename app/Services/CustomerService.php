@@ -89,4 +89,21 @@ class CustomerService implements CustomerServiceContract
             'path' => Paginator::resolveCurrentPath()
         ]);
     }
+
+    /**
+     * Filter data inside collection it self 
+     *
+     * @return  Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function filterCollection(Collection $customers, int $state)
+    {
+        $customersFilteredByState = $customers->filter(function ($value, $key) use ($state) {
+            if($state == 1)
+                return $value->state == 'OK';
+            else
+                return $value->state == 'NOK';
+        });
+
+        return $customersFilteredByState;
+    }
 }

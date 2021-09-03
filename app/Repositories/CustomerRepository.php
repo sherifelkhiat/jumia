@@ -56,12 +56,7 @@ class CustomerRepository extends Repository implements CustomerContract
 
             $customersWithCodeAndCountryAndState = $this->customerService->addExtraInfoToCustomerList($customersFilteredByCode, $countries);
 
-            $customersFilteredByCodeAndState = $customersWithCodeAndCountryAndState->filter(function ($value, $key) use ($state) {
-                if($state == 1)
-                    return $value->state == 'OK';
-                else
-                    return $value->state == 'NOK';
-            });
+            $customersFilteredByCodeAndState = $this->customerService->filterCollection($customersWithCodeAndCountryAndState, $state);
 
             $customersFilteredByCodeAndStatePagination = $this->customerService->paginate($customersFilteredByCodeAndState, 5);
 
@@ -71,7 +66,11 @@ class CustomerRepository extends Repository implements CustomerContract
         if($request->has('country')) {
             $countryCode = "(" . $request->get('country') . ")";
 
-            return $this->model->where(\DB::raw('substr(phone, 1, 5)'), '=', $countryCode)->paginate(5);
+            $customersFilteredByCode = $this->model->where(\DB::raw('substr(phone, 1, 5)'), '=', $countryCode)->paginate(5);
+
+            $customersWithCodeAndCountryAndState = $this->customerService->addExtraInfoToCustomerPaginator($customersFilteredByCode, $countries);
+
+            return $customersWithCodeAndCountryAndState;
         }
 
         if($request->has('state')){
@@ -81,16 +80,13 @@ class CustomerRepository extends Repository implements CustomerContract
 
             $customersWithCodeAndCountryAndState = $this->customerService->addExtraInfoToCustomerList($customers, $countries);
 
-            $customersFilteredByCodeAndState = $customersWithCodeAndCountryAndState->filter(function ($value, $key) use ($state) {
-                if($state == 1)
-                    return $value->state == 'OK';
-                else
-                    return $value->state == 'NOK';
-            });
+            $customersFilteredByCodeAndState = $this->customerService->filterCollection($customersWithCodeAndCountryAndState, $state);
 
             $customersFilteredByCodeAndStatePagination = $this->customerService->paginate($customersFilteredByCodeAndState, 5);
 
             return $customersFilteredByCodeAndStatePagination;
         }
+
+        return $this->getAllCustomers($columns, $countries);
     }
 }

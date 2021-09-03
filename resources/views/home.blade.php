@@ -14,7 +14,7 @@
                             <select class="form-control" name="country">
                                 <option disabled selected value>Select country</option>
                                 @foreach($countries as $country)
-                                <option value="{{ $country['code'] }}">{{ $country['country'] }}</option>
+                                <option value="{{ $country['code'] }}" {{ (isset($queryParams) && isset($queryParams['country'])  && $queryParams['country'] == $country['code'])?  'selected' : '' }}>{{ $country['country'] }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -22,8 +22,8 @@
                         <div class="form-group col-md-3">
                             <select class="form-control" name="state">
                                 <option disabled selected value>Select valid or not valid</option>
-                                <option value="0">Not valid numbers</option>
-                                <option value="1">Valid numbers</option>
+                                <option value="0" {{ (isset($queryParams) && isset($queryParams['state']) && $queryParams['state'] == 0)?  'selected' : '' }}>Not valid numbers</option>
+                                <option value="1" {{ (isset($queryParams) && isset($queryParams['state']) && $queryParams['state'] == 1)?  'selected' : '' }}>Valid numbers</option>
                             </select>
                         </div>
                         </div>
