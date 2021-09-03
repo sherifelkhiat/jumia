@@ -6,6 +6,7 @@ Installation
 - cp .env.example .env 
 - docker-compose build
 - docker-compose up -d
+- chmod -R 777 /path/to/folder  // just in local not prodution
 - ./composer install
 - ./composer update
 - ./php-artisan migrate --seed
